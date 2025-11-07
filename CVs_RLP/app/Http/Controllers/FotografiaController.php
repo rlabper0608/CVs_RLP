@@ -11,7 +11,9 @@ class FotografiaController extends Controller {
     function fotografia($idfotografia) {
         $peinado = Peinado::find($idfotografia);
 
-        if($alumno == null || $alumno->fotografia == null){
+        if($alumno == null || 
+                $alumno->fotografia == null ||
+                !file_exists(storage_path('app/private'). '/' . $alumno->fotografia)){
             return response()->file(base_path('public/assets/img/no-image.png'));
         }
         return response()->file(storage_path('app/private'). '/' . $alumno->fotografia);

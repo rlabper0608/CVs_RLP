@@ -12,7 +12,7 @@ class Alumno extends Model {
      function getPath() {
         $path = url('assets/img/alumno-defecto.png');
         
-        if($this->fotografia != null) {
+        if($this->fotografia != null && file_exists(storage_path('app/public'). '/' . $this->fotografia)) {
             $path = url('storage/' . $this->fotografia);
         }
         return $path;

@@ -39,9 +39,9 @@ class AlumnoController extends Controller
             $txtmessage = "The student has been added.";
 
             // Si me llega el archivo, lo subo y lo guardo
-            if($request->hasFile('image')) {
+            if($request->hasFile('fotogradia')) {
                 $ruta = $this->upload($request, $alumno);
-                $alumno->image = $ruta;
+                $alumno->fotografia = $ruta;
                 $alumno->save();
             }
             if($request->hasFile('pdf')) {
@@ -71,7 +71,7 @@ class AlumnoController extends Controller
         $name = $alumno->id . "." . $fotografia->getClientOriginalExtension();
 
         $ruta = $fotografia->storeAs('alumno', $name, 'public');
-        $ruta = $fotografia->storeAs('alumno', $name, 'local');
+        //$ruta = $fotografia->storeAs('alumno', $name, 'local');
 
         return $ruta;
     }
@@ -79,11 +79,11 @@ class AlumnoController extends Controller
     private function uploadPdf(Request $request, Alumno $alumno) {
 
         $pdf = $request->file('pdf');
-        $name = $alumno->id . "." . $pdf->getClientOriginalExtension();
+        //$name = $alumno->id . "." . $pdf->getClientOriginalExtension();
         $name = $alumno->id . ".pdf";
 
         $ruta = $pdf->storeAs('pdf', $name, 'public');
-        $ruta = $pdf->storeAs('pdf', $name, 'local');
+        //$ruta = $pdf->storeAs('pdf', $name, 'local');
 
         return $ruta;
     }
@@ -135,7 +135,6 @@ class AlumnoController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Alumno $alumno) {
-        dd($alumno);
         try{
             $result = $alumno->delete();
             $textmessage='El alumno se ha eliminado';

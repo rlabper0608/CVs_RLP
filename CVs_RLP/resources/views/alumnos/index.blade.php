@@ -47,7 +47,7 @@
                 <a class="link-destroy btn btn-danger btn-sm text-white" 
                   data-bs-toggle="modal"
                   data-bs-target="#destroyModal"
-                  data-href="{{ route('alumnos.destroy', $alumno->id)}}" 
+                  data-href="{{ route('alumnos.destroy', $alumno)}}" 
                   data-alumno="{{ $alumno->nombre }}">Delete</a>
             </td>
         </tr>
