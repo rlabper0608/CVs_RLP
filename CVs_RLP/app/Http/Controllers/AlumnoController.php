@@ -36,10 +36,10 @@ class AlumnoController extends Controller
 
         try {
             $result = $alumno->save(); //eloquent, inserta objeto en la tabla
-            $txtmessage = "The student has been added.";
+            $txtmessage = "El alumno se ha añadido correctamente.";
 
             // Si me llega el archivo, lo subo y lo guardo
-            if($request->hasFile('fotogradia')) {
+            if($request->hasFile('fotografia')) {
                 $ruta = $this->upload($request, $alumno);
                 $alumno->fotografia = $ruta;
                 $alumno->save();
@@ -48,11 +48,11 @@ class AlumnoController extends Controller
                 $ruta = $this->uploadPdf($request, $alumno);
             }
         } catch(UniqueConstraintViolationException $e){
-            $txtmessage = "Primary Key";
+            $txtmessage = "Llave Primaria";
         } catch(QueryException $e){
-            $txtmessage = "Null value";
+            $txtmessage = "Valor nulo";
         }catch (\Exception $e){
-            $txtmessage = "Fatal error";
+            $txtmessage = "Error Fatal";
         }
 
         $message = [
