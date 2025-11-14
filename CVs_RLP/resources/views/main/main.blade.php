@@ -8,7 +8,7 @@
         <div class="card shadow-sm"> <svg aria-label="Placeholder: Thumbnail" class="bd-placeholder-img card-img-top"
             height="225" preserveAspectRatio="xMidYMid slice" role="img" width="100%" xmlns="http://www.w3.org/2000/svg">
             <title>Placeholder</title>
-            <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
+            <rect width="100%" height="100%" src="{{ $alum->getPath() }}"></rect><text x="50%" y="50%" fill="#eceeef"
                 dy=".3em">{{ $alum->nombre }}</text>
                 <!-- Dentro del text $alumno->nombre entre llaves dobles -->
             </svg>

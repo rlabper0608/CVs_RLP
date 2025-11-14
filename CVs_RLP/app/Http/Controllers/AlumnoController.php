@@ -8,34 +8,36 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class AlumnoController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
+class AlumnoController extends Controller {
+    
     public function index():View{
-        $alumnos = Alumno::all(); //eloquent, da un array con todos los datos de la tabla
+        // Tomamos todos los alumons, y los pasamos para poder visualizarlos por pantalla en el index
+        $alumnos = Alumno::all(); 
         return view('alumnos.index', ['alumnos' => $alumnos]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create():View{
+        // Devolvemos la vista create, la cual contiene un formulario para rellenar
         return view('alumnos.create');
     }
 
+<<<<<<< HEAD
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request):RedirectResponse{
         // Queda validar los datos de entrada
+=======
+    public function store(Request $request):RedirectResponse{
+   
+>>>>>>> 04574e2 (Mejoras 14-11)
         
-        $alumno = new Alumno($request->all()); //eloquent, no hace nada en la base de datos
+        $alumno = new Alumno($request->all());
         $result = false;
 
+        // Intentamos guardar al alumno en la base de datos, y si no manejamos posibles errores
         try {
-            $result = $alumno->save(); //eloquent, inserta objeto en la tabla
+            $result = $alumno->save(); 
             $txtmessage = "El alumno se ha añadido correctamente.";
 
             // Si me llega el archivo, lo subo y lo guardo
@@ -66,12 +68,16 @@ class AlumnoController extends Controller
         }
     }
 
+<<<<<<< HEAD
     private function upload(Request $request, Alumno $alumno):RedirectResponse {
+=======
+    // Función para actualizar la información si es que nos hemos equivocado
+    private function upload(Request $request, Alumno $alumno) {
+>>>>>>> 04574e2 (Mejoras 14-11)
         $fotografia = $request->file('fotografia');
         $name = $alumno->id . "." . $fotografia->getClientOriginalExtension();
 
         $ruta = $fotografia->storeAs('alumno', $name, 'public');
-        //$ruta = $fotografia->storeAs('alumno', $name, 'local');
 
         return $ruta;
     }
@@ -79,39 +85,28 @@ class AlumnoController extends Controller
     private function uploadPdf(Request $request, Alumno $alumno):RedirectResponse {
 
         $pdf = $request->file('pdf');
-        //$name = $alumno->id . "." . $pdf->getClientOriginalExtension();
         $name = $alumno->id . ".pdf";
 
         $ruta = $pdf->storeAs('pdf', $name, 'public');
-        //$ruta = $pdf->storeAs('pdf', $name, 'local');
 
         return $ruta;
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Alumno $alumno):View{
         return view('alumnos.show', ['alumno' => $alumno]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Alumno $alumno):View{
         return view('alumnos.edit', ['alumno' => $alumno]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Alumno $alumno): RedirectResponse{
         $result = false;
         $alumno->fill($request->all());
 
         try {
             $result = $alumno->save();
-            $txtmessage = "The student has been edited.";
+            $txtmessage = "El alumno se ha actualizado.";
         } catch(UniqueConstraintViolationException $e) {
             $txtmessage = "Primary Key";
         } catch(QueryException $e) {
@@ -131,10 +126,14 @@ class AlumnoController extends Controller
         }
     }
 
+<<<<<<< HEAD
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Alumno $alumno):RedirectResponse {
+=======
+    public function destroy(Alumno $alumno): RedirectResponse {
+>>>>>>> 04574e2 (Mejoras 14-11)
         try{
             $result = $alumno->delete();
             $textmessage='El alumno se ha eliminado';
