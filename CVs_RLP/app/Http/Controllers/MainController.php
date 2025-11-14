@@ -13,4 +13,8 @@ class MainController extends Controller{
         $alumnos = Alumno::all();
         return view('main.main', ['alumnos' => $alumnos]);
     }
+
+    function about():View{
+        return view('main.about');
+    }
 }

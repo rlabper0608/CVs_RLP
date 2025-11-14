@@ -6,6 +6,7 @@ use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\FotografiaController;
 
 Route::get('/', [MainController::class, 'main'])->name('main');
+Route::get('about', [MainController::class, 'about'])->name('about');
 
 Route::get('alumno', [AlumnoController::class, 'index'])->name('alumnos.index');
 Route::get('alumno/create', [AlumnoController::class, 'create'])->name('alumnos.create');

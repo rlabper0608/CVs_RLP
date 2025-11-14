@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+// Importamos el modelo y clases necesarias
 use App\Models\Alumno;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class AlumnoController extends Controller {
     
@@ -23,19 +25,21 @@ class AlumnoController extends Controller {
 
     public function store(Request $request):RedirectResponse{
    
+        // Validación de todos los campos enviados desde el formulario
         $request->validate([
             "nombre" => "required|string|max:60",
             "apellidos" => "required|string|max:100",
             "telefono" => "required|string|max:12",
-            "correo" => "required|string|unique:alumnos.correo|max:40",
+            "correo" => "required|email|unique:alumnos,correo|max:40",
             "fecha_nacimiento" => "required|date",
             "nota_media" => "required|numeric|min:0|max:10",
-            "experiencia" => "required|text|",
-            "formacion" => "required|text|",
-            "habilidades" => "required|text|",
-            "fotografia" => "nullable|image|max:2048|unique",
+            "experiencia" => "required|string|max:2000",
+            "formacion" => "required|string|max:2000",
+            "habilidades" => "required|string|max:2000",
+            "fotografia" => "nullable|image|max:2048",
         ]);
         
+        // Creamos un nuevo objeto Alumno con los datos del request
         $alumno = new Alumno($request->all());
         $result = false;
 
@@ -44,20 +48,25 @@ class AlumnoController extends Controller {
             $result = $alumno->save(); 
             $txtmessage = "El alumno se ha añadido correctamente.";
 
-            // Si me llega el archivo, lo subo y lo guardo
+            // Si me llega la fotografia, la subo y la guardo
             if($request->hasFile('fotografia')) {
                 $ruta = $this->upload($request, $alumno);
                 $alumno->fotografia = $ruta;
                 $alumno->save();
             }
+
+            // Si se sube un PDF, lo subimos (sin guardar en BD)
             if($request->hasFile('pdf')) {
                 $ruta = $this->uploadPdf($request, $alumno);
             }
+            
         } catch(UniqueConstraintViolationException $e){
-            $txtmessage = "Llave Primaria";
+            // Error por clave duplicada
+            $txtmessage = "Clave duplicada";
         } catch(QueryException $e){
             $txtmessage = "Valor nulo";
         }catch (\Exception $e){
+            // Cualquier error
             $txtmessage = "Error Fatal";
         }
 
@@ -65,6 +74,7 @@ class AlumnoController extends Controller {
             "mensajeTexto" => $txtmessage,
         ];
 
+        // Mostramos en la página si se guardó correctamente el alumno o saltó algun error
         if($result){
             return redirect()->route('main')->with($message);
         }else{
@@ -72,21 +82,8 @@ class AlumnoController extends Controller {
         }
     }
 
-    // Función para actualizar la información si es que nos hemos equivocado
-    private function upload(Request $request, Alumno $alumno) {
-
-        $request->validate([
-            "nombre" => "required|string|max:60",
-            "apellidos" => "required|string|max:100",
-            "telefono" => "required|string|max:12",
-            "correo" => "required|string|max:40",
-            "fecha_nacimiento" => "required|date",
-            "nota_media" => "required|numeric|min:0|max:10",
-            "experiencia" => "required|text|",
-            "formacion" => "required|text|",
-            "habilidades" => "required|text|",
-            "fotografia" => "required|image|max:2048",
-        ]);
+    // Función para subir la fotografía, si es que ha decidido subirla
+    private function upload(Request $request, Alumno $alumno):string {
 
         $fotografia = $request->file('fotografia');
         $name = $alumno->id . "." . $fotografia->getClientOriginalExtension();
@@ -96,7 +93,8 @@ class AlumnoController extends Controller {
         return $ruta;
     }
 
-    private function uploadPdf(Request $request, Alumno $alumno):RedirectResponse {
+    // Función para guardar el pdf, si es que lo ha subido
+    private function uploadPdf(Request $request, Alumno $alumno): string {
 
         $pdf = $request->file('pdf');
         $name = $alumno->id . ".pdf";
@@ -106,27 +104,46 @@ class AlumnoController extends Controller {
         return $ruta;
     }
 
+    // Función que nos devuelve la vista, donde se ve la información individual de cada alumno
     public function show(Alumno $alumno):View{
         return view('alumnos.show', ['alumno' => $alumno]);
     }
 
+    // Función que nos devuelve el formulario relleno con la información del usuario por si queremos editarla
     public function edit(Alumno $alumno):View{
         return view('alumnos.edit', ['alumno' => $alumno]);
     }
 
+    // Función que nos permite actualizar la información que hemos editado en le formulario pasado en la función de arriba
     public function update(Request $request, Alumno $alumno): RedirectResponse{
+
+        // Validamos que todos los datos introducidos sean correctos
+        $request->validate([
+            "nombre" => "required|string|max:60",
+            "apellidos" => "required|string|max:100",
+            "telefono" => "required|string|max:12",
+            "correo" => "required|email|max:40",
+            "fecha_nacimiento" => "required|date",
+            "nota_media" => "required|numeric|min:0|max:10",
+            "experiencia" => "required|string|max:2000",
+            "formacion" => "required|string|max:2000",
+            "habilidades" => "required|string|max:2000",
+            "fotografia" => "required|image|max:2048",
+        ]);
+
         $result = false;
         $alumno->fill($request->all());
 
+        // Volvemos a repetir el try catch, que teniamos en estore, para los errores y en este caso la actualización de información
         try {
             $result = $alumno->save();
             $txtmessage = "El alumno se ha actualizado.";
         } catch(UniqueConstraintViolationException $e) {
-            $txtmessage = "Primary Key";
+            $txtmessage = "Clave duplicada";
         } catch(QueryException $e) {
-            $txtmessage = "Null value";
+            $txtmessage = "Valor nulo";
         }catch (\Exception $e) {
-            $txtmessage = "Fatal error";
+            $txtmessage = "Error fatal";
         }
 
         $message = [
@@ -140,6 +157,7 @@ class AlumnoController extends Controller {
         }
     }
 
+    // Función que sirve para elimminar del resgistro a un alumno
     public function destroy(Alumno $alumno): RedirectResponse {
 
         try{
@@ -151,7 +169,7 @@ class AlumnoController extends Controller {
             $textmessage='El alumno no se ha eliminado';
         }
         $message = [
-            'messajeTexto' => $textmessage,
+            'mensajeTexto' => $textmessage,
         ];
         if($result){
             return redirect()->route('main')->with($message);

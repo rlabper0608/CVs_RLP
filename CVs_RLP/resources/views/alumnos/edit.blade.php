@@ -5,7 +5,8 @@ Edición
 @endsection
 
 @section('styles')
-<link rel="stylesheet" href="{{ url('assets/css/editStyle.css') }}">
+<link rel="stylesheet" href="{{ url('assets/css/createStyles.css') }}">
+<link rel="stylesheet" href="{{ url('assets/css/editStyles.css') }}">
 @endsection
 
 @section('content')
