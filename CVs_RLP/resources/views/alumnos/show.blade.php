@@ -1,6 +1,36 @@
 @extends('bootstrap.template')
 
+@section('title')
+{{$alumno->nombre}} 
+@endsection
+
+@section('styles')
+<link rel="stylesheet" href="{{ url('assets/css/showStyle.css') }}">
+@endsection
+
 @section('content')
+
+<!-- Ventanas Modales principio -->
+
+<div class="modal fade" id="destroyModal" tabindex="-1" aria-labelledby="destroyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="destroyModalLabel">¿Seguro que quieres borrar a este alumno?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="destroyModalContent">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button  form="form-delete" type="submit" class="btn btn-primary">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ventanas modales fin -->
+
 <main class="px-3">
     <h1>{{ $alumno->nombre }} {{ $alumno->apellidos }}</h1> 
     <div class="lead">
@@ -45,66 +75,18 @@
             {{ $alumno->nota_media }}
         </span>
     </div>
+    <div class="espacio">
+        <a href=" {{ route('alumnos.edit', $alumno->id) }}" ><button class="btn btn-warning  text-white"> Edit</button></a>
+        <a 
+            data-bs-toggle="modal"
+            data-bs-target="#destroyModal"
+            data-href="{{ route('alumnos.destroy', $alumno)}}" 
+            data-alumno="{{ $alumno->nombre }}"><button class="btn btn-danger text-white"> Delete</button></a>
+    </div>
 </main>
 
-<style>
-    /* Contenedor principal */
-  main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding-top: 40px;
-  }
-
-  /* Títulos principales */
-  main h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-      color: #1a1a1a;
-  }
-
-  /* Secciones tipo "lead" */
-  .lead {
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      margin-bottom: 25px;
-  }
-
-  /* Imagen del alumno */
-  .lead img {
-      border-radius: 10px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-  }
-
-  /* Enlace a PDF */
-  .lead a {
-      text-decoration: none;
-      font-weight: 600;
-      color: #0d6efd;
-  }
-
-  .lead a:hover {
-      text-decoration: underline;
-  }
-
-  /* Botón con el nombre */
-  .btn-light {
-      border-radius: 50px;
-      padding: 10px 25px;
-      border: 1px solid #ddd !important;
-  }
-
-  /* Datos de contacto */
-  .lead span {
-      margin-left: 15px;
-      font-size: 1.1rem;
-  }
-
-  /* Estilo general */
-  body {
-      background: #eef1f4;
-  }
-</style>
+<form action="" method="post" id="form-delete">
+    @csrf
+    @method('delete')
+</form>
 @endsection

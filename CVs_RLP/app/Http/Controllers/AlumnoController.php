@@ -21,16 +21,20 @@ class AlumnoController extends Controller {
         return view('alumnos.create');
     }
 
-<<<<<<< HEAD
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request):RedirectResponse{
-        // Queda validar los datos de entrada
-=======
     public function store(Request $request):RedirectResponse{
    
->>>>>>> 04574e2 (Mejoras 14-11)
+        $request->validate([
+            "nombre" => "required|string|max:60",
+            "apellidos" => "required|string|max:100",
+            "telefono" => "required|string|max:12",
+            "correo" => "required|string|unique:alumnos.correo|max:40",
+            "fecha_nacimiento" => "required|date",
+            "nota_media" => "required|numeric|min:0|max:10",
+            "experiencia" => "required|text|",
+            "formacion" => "required|text|",
+            "habilidades" => "required|text|",
+            "fotografia" => "nullable|image|max:2048|unique",
+        ]);
         
         $alumno = new Alumno($request->all());
         $result = false;
@@ -68,12 +72,22 @@ class AlumnoController extends Controller {
         }
     }
 
-<<<<<<< HEAD
-    private function upload(Request $request, Alumno $alumno):RedirectResponse {
-=======
     // Función para actualizar la información si es que nos hemos equivocado
     private function upload(Request $request, Alumno $alumno) {
->>>>>>> 04574e2 (Mejoras 14-11)
+
+        $request->validate([
+            "nombre" => "required|string|max:60",
+            "apellidos" => "required|string|max:100",
+            "telefono" => "required|string|max:12",
+            "correo" => "required|string|max:40",
+            "fecha_nacimiento" => "required|date",
+            "nota_media" => "required|numeric|min:0|max:10",
+            "experiencia" => "required|text|",
+            "formacion" => "required|text|",
+            "habilidades" => "required|text|",
+            "fotografia" => "required|image|max:2048",
+        ]);
+
         $fotografia = $request->file('fotografia');
         $name = $alumno->id . "." . $fotografia->getClientOriginalExtension();
 
@@ -126,14 +140,8 @@ class AlumnoController extends Controller {
         }
     }
 
-<<<<<<< HEAD
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Alumno $alumno):RedirectResponse {
-=======
     public function destroy(Alumno $alumno): RedirectResponse {
->>>>>>> 04574e2 (Mejoras 14-11)
+
         try{
             $result = $alumno->delete();
             $textmessage='El alumno se ha eliminado';

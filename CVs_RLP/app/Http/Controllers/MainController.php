@@ -10,7 +10,7 @@ use Illuminate\View\View;
 class MainController extends Controller{
 
     function main():View{
-        $alumno = Alumno::all();
-        return view('main.main', ['alumno' => $alumno]);
+        $alumnos = Alumno::all();
+        return view('main.main', ['alumnos' => $alumnos]);
     }
 }

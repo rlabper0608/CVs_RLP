@@ -1,0 +1,61 @@
+        /* Contenedor general del formulario */
+    form {
+        max-width: 700px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Separación entre campos */
+    .espacio {
+        margin-bottom: 20px;
+    }
+
+    /* Labels */
+    form label {
+        font-weight: 600;
+        margin-bottom: 6px;
+        display: block;
+        color: #333;
+    }
+
+    /* Inputs y textareas */
+    form .form-control {
+        border-radius: 10px;
+        padding: 10px 14px;
+        border: 1px solid #ced4da;
+        font-size: 1rem;
+        transition: all .2s ease;
+    }
+
+    /* Efecto al enfocar */
+    form .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 6px rgba(13, 110, 253, 0.25);
+    }
+
+    /* Textareas más suaves */
+    textarea.form-control {
+        resize: vertical;
+    }
+
+    /* Botón de enviar */
+    form .btn-primary {
+        padding: 12px 20px;
+        font-size: 1.1rem;
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    /* Hover del botón */
+    form .btn-primary:hover {
+        background-color: #0b5ed7;
+    }
+
+    /* Fondo suave para la página */
+    body {
+        background: #eef2f6;
+        margin: 0;
+    }

@@ -13,6 +13,138 @@
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url('assets/css/styles.css') }}">
     <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
+    @yield('styles')
+    <style>
+            /* ================================
+        Global Styles
+      ================================ */
+      body {
+          background-color: #f5f6f8;
+          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+          color: #333;
+      }
+
+      /* ================================
+        Navbar
+      ================================ */
+      .navbar {
+          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      }
+
+      .navbar .nav-link {
+          color: #c6c6c6 !important;
+          transition: color 0.2s ease-in-out;
+      }
+
+      .navbar .nav-link:hover {
+          color: #fff !important;
+      }
+
+      .navbar .nav-link.link-secondary {
+          color: #fff !important;
+          font-weight: 500;
+      }
+
+      /* ================================
+        Header Navigation
+      ================================ */
+      header {
+          border-color: #444 !important;
+      }
+
+      header .nav-link {
+          font-size: 1rem;
+          font-weight: 500;
+          color: #ddd !important;
+      }
+
+      header .nav-link:hover {
+          color: #fff !important;
+      }
+
+      header .nav-link.disabled {
+          color: #777 !important;
+          cursor: not-allowed;
+      }
+
+      /* ================================
+        Alerts
+      ================================ */
+      .alert {
+          border-radius: 10px;
+          font-weight: 500;
+      }
+
+      /* ================================
+        Container content
+      ================================ */
+      .container {
+          max-width: 1100px;
+      }
+
+      h1, h2, h3 {
+          font-weight: 600;
+          color: #222;
+      }
+
+      /* ================================
+        Buttons
+      ================================ */
+      .btn-primary {
+          background-color: #0d6efd;
+          border-color: #0d6efd;
+          transition: all 0.2s ease-in-out;
+      }
+
+      .btn-primary:hover {
+          background-color: #0b5ed7;
+          border-color: #0a58ca;
+      }
+
+      /* ================================
+        Custom Card Style
+      ================================ */
+      .card {
+          border-radius: 12px;
+          border: none;
+          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-header {
+          background-color: #0d6efd !important;
+          color: #fff;
+          font-weight: 600;
+      }
+
+      /* ================================
+        Forms
+      ================================ */
+      form label {
+          font-weight: 500;
+      }
+
+      form input, form select, form textarea {
+          border-radius: 8px !important;
+      }
+
+      form input:focus,
+      form select:focus,
+      form textarea:focus {
+          border-color: #0d6efd !important;
+          box-shadow: 0 0 0 0.15rem rgba(13,110,253,.25);
+      }
+
+      /* ================================
+        Footer (por si lo agregas)
+      ================================ */
+      footer {
+          padding: 20px 0;
+          margin-top: 40px;
+          text-align: center;
+          color: #777;
+      }
+
+    </style>
   </head>
 
   <body>
@@ -36,14 +168,12 @@
 
     <div class="container my-5">
 
-      <!-- return redirect() -> route('main')->with($message); -->
       @if(session("mensajeTexto"))
       <div class="alert alert-success">
           {{ session("mensajeTexto") }}
         </div>
       @endif
 
-      <!-- return back()->withInput()->withErrors($message); -->
       @error('mensajeTexto')
         <div class="alert alert-danger">
           {{ $message }}
