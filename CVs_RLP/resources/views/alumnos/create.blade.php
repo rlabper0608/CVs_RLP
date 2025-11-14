@@ -50,8 +50,18 @@ Añadir
         <textarea class="form-control"  minlength="5" required id="habilidades" name="habilidades" placeholder="Habilidades que tiene el alumno" cols="60" rows="3" >{{ old('habilidades') }}</textarea>
     </div>
     <div>
-        <label for="fotografia">Fotografia:</label>
-        <input class="form-control"  id="fotografia" name="fotografia" type="file" accept="image/*">
+        <!-- Zona de Drag & Drop -->
+        <div id="dropZone" class="drop-zone">
+            <div class="drop-zone-icon">📷</div>
+            <div class="drop-zone-text">
+                <strong>Arrastra una imagen aquí</strong> o haz clic para seleccionar
+                <br>
+                <small>Formatos: JPG, PNG, GIF (Máx. 2MB)</small>
+            </div>
+            <div id="imagePreview"></div>
+        </div>
+        <!-- Input oculto (se activa con el drag & drop o click) -->
+        <input class="form-control" id="fotografia" name="fotografia" type="file" accept="image/*" style="display: none;">
     </div>
     <div>
         <label for="pdf">Pdf del CV:</label>
@@ -62,4 +72,8 @@ Añadir
     </div>
 </form>
 
+@endsection
+
+@section('scripts')
+<script src="{{  url('assets/js/arrastrar.js') }}"></script>
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 // Importamos el modelo y clases necesarias
 use App\Models\Alumno;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -9,6 +10,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
+
 
 class AlumnoController extends Controller {
     
@@ -30,7 +33,7 @@ class AlumnoController extends Controller {
             "nombre" => "required|string|max:60",
             "apellidos" => "required|string|max:100",
             "telefono" => "required|string|max:12",
-            "correo" => "required|email|unique:alumnos,correo|max:40",
+            "correo" => "required|email|unique:alumno,correo|max:40",
             "fecha_nacimiento" => "required|date",
             "nota_media" => "required|numeric|min:0|max:10",
             "experiencia" => "required|string|max:2000",
@@ -128,14 +131,40 @@ class AlumnoController extends Controller {
             "experiencia" => "required|string|max:2000",
             "formacion" => "required|string|max:2000",
             "habilidades" => "required|string|max:2000",
-            "fotografia" => "required|image|max:2048",
+            "fotografia" => "nullable|image|max:2048",
         ]);
+
+        if($request->deleteImage == 'true') {
+            // Borrado de la imagen de la fotografia seleccionada
+            Storage::delete($alumno->fotografia);
+            
+            //La ponemos como nula
+            $alumno->fotografia = null;
+            
+        }
 
         $result = false;
         $alumno->fill($request->all());
 
         // Volvemos a repetir el try catch, que teniamos en estore, para los errores y en este caso la actualización de información
         try {
+            if($request->hasFile('fotografia')) {
+                $ruta = $this->upload($request, $alumno);
+                $alumno ->fotografia = $ruta;
+            }
+
+            if($request->hasFile('pdf')) {
+            // Elimina el PDF anterior si existe
+            $rutaPdfAntiguo = 'pdf/' . $alumno->id . '.pdf';
+            if(Storage::disk('public')->exists($rutaPdfAntiguo) ||   Storage::disk('local')->exists($rutaPdfAntiguo)) {
+                Storage::disk('public')->delete($rutaPdfAntiguo);
+                Storage::disk('local')->delete($rutaPdfAntiguo);
+            }
+            
+            // Guarda el nuevo PDF (machaca el anterior con el mismo nombre)
+            $this->uploadPdf($request, $alumno);
+        }
+
             $result = $alumno->save();
             $txtmessage = "El alumno se ha actualizado.";
         } catch(UniqueConstraintViolationException $e) {
