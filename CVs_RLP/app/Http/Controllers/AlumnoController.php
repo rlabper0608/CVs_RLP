@@ -28,7 +28,7 @@ class AlumnoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request):RedirectResponse{
         // Queda validar los datos de entrada
         
         $alumno = new Alumno($request->all()); //eloquent, no hace nada en la base de datos
@@ -66,7 +66,7 @@ class AlumnoController extends Controller
         }
     }
 
-    private function upload(Request $request, Alumno $alumno) {
+    private function upload(Request $request, Alumno $alumno):RedirectResponse {
         $fotografia = $request->file('fotografia');
         $name = $alumno->id . "." . $fotografia->getClientOriginalExtension();
 
@@ -76,7 +76,7 @@ class AlumnoController extends Controller
         return $ruta;
     }
 
-    private function uploadPdf(Request $request, Alumno $alumno) {
+    private function uploadPdf(Request $request, Alumno $alumno):RedirectResponse {
 
         $pdf = $request->file('pdf');
         //$name = $alumno->id . "." . $pdf->getClientOriginalExtension();
@@ -134,7 +134,7 @@ class AlumnoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Alumno $alumno) {
+    public function destroy(Alumno $alumno):RedirectResponse {
         try{
             $result = $alumno->delete();
             $textmessage='El alumno se ha eliminado';
