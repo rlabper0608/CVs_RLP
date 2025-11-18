@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\AlumnoCreateRequest;
+use App\Http\Requests\AlumnoEditRequest;
 
 
 class AlumnoController extends Controller {
@@ -26,21 +28,7 @@ class AlumnoController extends Controller {
         return view('alumnos.create');
     }
 
-    public function store(Request $request):RedirectResponse{
-   
-        // Validación de todos los campos enviados desde el formulario
-        $request->validate([
-            "nombre" => "required|string|max:60",
-            "apellidos" => "required|string|max:100",
-            "telefono" => "required|string|max:12",
-            "correo" => "required|email|unique:alumno,correo|max:40",
-            "fecha_nacimiento" => "required|date",
-            "nota_media" => "required|numeric|min:0|max:10",
-            "experiencia" => "required|string|max:2000",
-            "formacion" => "required|string|max:2000",
-            "habilidades" => "required|string|max:2000",
-            "fotografia" => "nullable|image|max:2048",
-        ]);
+    public function store(AlumnoCreateRequest $request):RedirectResponse{
         
         // Creamos un nuevo objeto Alumno con los datos del request
         $alumno = new Alumno($request->all());
@@ -118,21 +106,9 @@ class AlumnoController extends Controller {
     }
 
     // Función que nos permite actualizar la información que hemos editado en le formulario pasado en la función de arriba
-    public function update(Request $request, Alumno $alumno): RedirectResponse{
+    public function update(AlumnoEditRequest $request, Alumno $alumno): RedirectResponse{
 
         // Validamos que todos los datos introducidos sean correctos
-        $request->validate([
-            "nombre" => "required|string|max:60",
-            "apellidos" => "required|string|max:100",
-            "telefono" => "required|string|max:12",
-            "correo" => "required|email|max:40",
-            "fecha_nacimiento" => "required|date",
-            "nota_media" => "required|numeric|min:0|max:10",
-            "experiencia" => "required|string|max:2000",
-            "formacion" => "required|string|max:2000",
-            "habilidades" => "required|string|max:2000",
-            "fotografia" => "nullable|image|max:2048",
-        ]);
 
         if($request->deleteImage == 'true') {
             // Borrado de la imagen de la fotografia seleccionada
